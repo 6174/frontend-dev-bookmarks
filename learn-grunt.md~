@@ -78,45 +78,9 @@
    *  改写gruntfile.js 为
 
   ```JavaScript
-	module.exports = function(grunt) {
-	  // Project configuration.
-	  grunt.initConfig({
-	    pkg: grunt.file.readJSON('package.json'),
-	    uglify: {
-	      options: {
-		banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-	      },
-	      build: {
-		src: '<%= pkg.version %>/src/<%= pkg.scripts.index %>',
-		dest: '<%= pkg.version %>/build/<%= pkg.name %>.min.js'
-	      }
-	    },
-	    // make a zipfile
-	    compress: {
-	      main: {
-		options: {
-		  archive: 'archive.zip'
-		},
-		files: [{
-		  src: ['<%= pkg.version %>/**'],
-		  dest: '<%= pkg.version %>/',
-		  filter: 'isFile'
-		}]
-	      }
-	    }
-	  });
-	  // Load the plugin that provides the "uglify" task.
-	  grunt.loadNpmTasks('grunt-contrib-uglify');
-	  grunt.loadNpmTasks('grunt-contrib-compress');
-	  // Default task(s).
-	  grunt.registerTask('default', ['uglify', "compress"]);
-	};
 
   ```
-  
-  * 转到项目命令行： grunt
-  * 这样就生层了archieve.zip 文件。
-     
+   
 
 
 
