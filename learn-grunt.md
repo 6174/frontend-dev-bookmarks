@@ -116,7 +116,100 @@
   
   * 转到项目命令行： grunt
   * 这样就生层了archieve.zip 文件。
-     
+
+----
+###深入Gruntfile.js
+   
+  * 官方文档: <a href="http://gruntjs.com/configuring-tasks"> Grunt Configuration </a>
+  * task:  之前我们写的compress 和 uglify就是一个task, task就是需要grunt做的任务， 在配置对象的第一级下面：
+    
+    ```JavaScript
+	grunt.initConfig({
+	  concat: {
+	    // concat task configuration goes here.
+	  },
+	  uglify: {
+	    // uglify task configuration goes here.
+	  },
+	  // Arbitrary non-task-specific properties.
+	  my_property: 'whatever',
+	  my_src_files: ['foo/*.js', 'bar/*.js'],
+	});
+    ```
+  * task target: 每个task的目标， 也就是子任务
+   
+    ```JavaScript
+        //这里foo，bar 都是一个target
+	grunt.initConfig({
+	  concat: {
+	    foo: {
+	      // concat task "foo" target options and files go here.
+	    },
+	    bar: {
+	      // concat task "bar" target options and files go here.
+	    },
+	  },
+	  uglify: {
+	    bar: {
+	      // uglify task "bar" target options and files go here.
+	    },
+	  },
+	});
+    ```
+    运行 `grunt concat:foo` or `grunt concat:bar`会只完成指定的任务目标。 
+    运行 `grunt concat`会完成指定的task
+
+ * options: 
+
+   ```JavaScript
+	grunt.initConfig({
+	  concat: {
+	    options: {
+	      // Task-level options may go here, overriding task defaults.
+	    },
+	    foo: {
+	      options: {
+		// "foo" target options may go here, overriding task-level options.
+	      },
+	    },
+	    bar: {
+	      // No options specified; this target will use task-level options.
+	    },
+	  },
+	});
+   ```
+   如上所见， options可以放在task下面， 也可以放在target下面， options其实就是配置文件， options会覆盖build-in defaults
+
+ * Files: 在grunt中， 对文件的操作很频繁， 所以grunt对文件有专门的配置
+
+   所有的文件定义都支持 src 和 dest， "Compact" and "Files Array" 支持一些额外的功能：
+	1. `Filter`: filter的名字可以是 'isFile', 'isDirectory' 等如下满珠NodeJs文件判断的方法名， 也可一是一个函数， 返回true满足， false过滤掉， 参数为文件名
+	   ```JavaScript
+		stats.isFile()
+		stats.isDirectory()
+		stats.isBlockDevice()
+		stats.isCharacterDevice()
+		stats.isSymbolicLink() (only valid with fs.lstat())
+		stats.isFIFO()
+		stats.isSocket()
+	   ```
+   	2. `nonull`: 
+   ``` 
+   When a match is not found, return a list containing the pattern itself. Otherwise, an empty list is returned if there are no matches. Combined with grunt's --verbose flag, this option can help debug file path issues
+   ``` 
+   	3. `dot`:
+   ```
+Allow patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.
+   ```
+   	4. `matchBase`::
+   ```
+If set, patterns without slashes will be matched against the basename of the path if it contains slashes. For example, a?b would match the path /xyz/123/acb, but not /xyz/acb/123
+   ```
+   	5. `expand`:
+   ```
+ Process a dynamic src-dest file mapping, see "Building the files object dynamically" for more information.
+   ```
+           
 
 
 
