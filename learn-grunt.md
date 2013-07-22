@@ -7,16 +7,16 @@
 
 ----
 ###Install
-  *. sudo npm install -g grunt-cli
-  *. sudo npm install -g grunt-init
-  *. sudo npm install -g grunt --save-dev
+  * sudo npm install -g grunt-cli
+  * sudo npm install -g grunt-init
+  * sudo npm install -g grunt --save-dev
 
 ----
 ###Hello World
-  *. 需求: 将一个文件压缩编译压缩到指定目录
-  *. mkdir hello-grunt 
-  *. cd hello-grunt
-  *. npm init... 问答方式完package.json的配置
+  * 需求: 将一个文件压缩编译压缩到指定目录
+  * mkdir hello-grunt 
+  * cd hello-grunt
+  * npm init... 问答方式完package.json的配置
   配置结果:
 
   ```JavaScript
@@ -31,7 +31,7 @@
 	    }
 	}
   ```
-  *. 项目目录结构：
+  * 项目目录结构：
     |---0.0.0
           |---src
                  |---index.js
@@ -41,7 +41,7 @@
     Gruntfile.js
     README.md
 	  
-  *. 写Gruntfile.js or Gruntfile.coffee
+  * 写Gruntfile.js or Gruntfile.coffee
   
   ```JavaScript
 	module.exports = function(grunt) {
@@ -64,8 +64,8 @@
 	  grunt.registerTask('default', ['uglify']);
 	};
   ```
-   *. npm install
-   *. grunt
+   * npm install
+   * grunt
    ok, 这样就完成了， 讲src下面的index.js 压缩成为index.min.js
 
 
