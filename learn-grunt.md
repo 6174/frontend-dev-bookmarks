@@ -136,6 +136,7 @@
 	  my_src_files: ['foo/*.js', 'bar/*.js'],
 	});
     ```
+
   * task target: 每个task的目标， 也就是子任务
    
     ```JavaScript
@@ -156,8 +157,9 @@
 	  },
 	});
     ```
-    运行 `grunt concat:foo` or `grunt concat:bar`会只完成指定的任务目标。 
-    运行 `grunt concat`会完成指定的task
+ 	* 运行 `grunt concat:foo` or `grunt concat:bar`会只完成指定的任务目标。 
+	* 运行 `grunt concat`会完成指定的task
+
 
  * options: 
 
@@ -193,22 +195,150 @@
 		stats.isFIFO()
 		stats.isSocket()
 	   ```
+ 	   ```JavaScript
+		grunt.initConfig({
+		  clean: {
+		    foo: {
+		      src: ['tmp/**/*'],
+		      filter: function(filepath) {
+			return (grunt.file.isDir(filepath) && require('fs').readdirSync(filepath).length === 0);
+		      },
+		    },
+		  },
+		});
+	   ```
    	2. `nonull`: 
-   ``` 
+ 
    When a match is not found, return a list containing the pattern itself. Otherwise, an empty list is returned if there are no matches. Combined with grunt's --verbose flag, this option can help debug file path issues
-   ``` 
+  
    	3. `dot`:
-   ```
-Allow patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.
-   ```
-   	4. `matchBase`::
-   ```
-If set, patterns without slashes will be matched against the basename of the path if it contains slashes. For example, a?b would match the path /xyz/123/acb, but not /xyz/acb/123
-   ```
-   	5. `expand`:
-   ```
+   
+ patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.
+
+	4. `matchBase`:
+
+ set, patterns without slashes will be matched against the basename of the path if it contains slashes. For example, a?b would match the path /xyz/123/acb, but not /xyz/acb/123	
+
+	5. `expand`:
+
  Process a dynamic src-dest file mapping, see "Building the files object dynamically" for more information.
+
+  * Dynamic-files
+   
+    ```JavasScript
+	grunt.initConfig({
+	  minify: {
+            //这里的就是静态的src-dest mapping
+	    static_mappings: {
+	      // Because these src-dest file mappings are manually specified, every
+	      // time a new file is added or removed, the Gruntfile has to be updated.
+	      files: [
+		{src: 'lib/a.js', dest: 'build/a.min.js'},
+		{src: 'lib/b.js', dest: 'build/b.min.js'},
+		{src: 'lib/subdir/c.js', dest: 'build/subdir/c.min.js'},
+		{src: 'lib/subdir/d.js', dest: 'build/subdir/d.min.js'},
+	      ],
+	    },
+  	    //这里就是动态的file mapping， 下面会对动态配置参数详细介绍
+	    dynamic_mappings: {
+	      // Grunt will search for "**/*.js" under "lib/" when the "minify" task
+	      // runs and build the appropriate src-dest file mappings then, so you
+	      // don't need to update the Gruntfile when files are added or removed.
+	      files: [
+		{
+		  expand: true,     // Enable dynamic expansion.
+		  cwd: 'lib/',      // Src matches are relative to this path.
+		  src: ['**/*.js'], // Actual pattern(s) to match.
+		  dest: 'build/',   // Destination path prefix.
+		  ext: '.min.js',   // Dest filepaths will have this extension.
+		},
+	      ],
+	    },
+	  },
+	});
+
+    ```
+	1. expand: 只有expand设置为true的时候， 才能进行动态mapping
+	2. cwd: src的相对目录， 所有的minify的文件都会跑到相对这个目录下面
+	3. src/dest: 和之前File的一样
+	4. ext: 文件扩展名
+	5. flattern: 去除src文件路径信息
+	6. rename: function; dest, src---> newDest的映射。
+
+  * CompactFormat
+	
+   ```JavaScript
+	grunt.initConfig({
+	  jshint: {
+	    foo: {
+	      src: ['src/aa.js', 'src/aaa.js']
+	    },
+	  },
+	  concat: {
+	    bar: {
+	      src: ['src/bb.js', 'src/bbb.js'],
+	      dest: 'dest/b.js',
+	    },
+	  },
+	});
    ```
+    compactFormat 下面每个target只有一个src-dest对， 通常对与只读文件方式的target使用， 如jshint
+
+  * FileObjecFormat
+
+   ```JavaScript
+	grunt.initConfig({
+	  concat: {
+	    foo: {
+	      files: {
+		'dest/a.js': ['src/aa.js', 'src/aaa.js'],
+		'dest/a1.js': ['src/aa1.js', 'src/aaa1.js'],
+	      },
+	    },
+	    bar: {
+	      files: {
+		'dest/b.js': ['src/bb.js', 'src/bbb.js'],
+		'dest/b1.js': ['src/bb1.js', 'src/bbb1.js'],
+	      },
+	    },
+	  },
+	});
+   ```
+    如上， files对象， 不支持additional properties 
+
+ * FileArrayFormat
+
+  ```JavaScript
+	  grunt.initConfig({
+	  concat: {
+	    foo: {
+	      files: [
+		{src: ['src/aa.js', 'src/aaa.js'], dest: 'dest/a.js'},
+		{src: ['src/aa1.js', 'src/aaa1.js'], dest: 'dest/a1.js'},
+	      ],
+	    },
+	    bar: {
+             //带additional properties 
+	      files: [
+		{src: ['src/bb.js', 'src/bbb.js'], dest: 'dest/b/', nonull: true},
+		{src: ['src/bb1.js', 'src/bbb1.js'], dest: 'dest/b1/', filter: 'isFile'},
+	      ],
+	    },
+	  },
+	});
+  ```
+  支持additional properties 
+
+
+
+  * Globbing Pattern
+
+  * matches any number of characters, but not /
+? matches a single character, but not /
+** matches any number of characters, including /, as long as it's the only thing in a path part
+{} allows for a comma-separated list of "or" expressions
+! at the beginning of a pattern will negate the match
+ 
            
 
 
