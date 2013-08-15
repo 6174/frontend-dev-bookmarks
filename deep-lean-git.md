@@ -1,4 +1,4 @@
- ## Git 深入学习笔记
+Git 深入学习笔记
 ---
 ### 细节概念  
 * CVS === 版本控制系统
@@ -109,10 +109,21 @@
  	2. 这里只是删除了分支名字， 并未删除实际分支提交， 因为之前的tag保存了root到tag的所有提交， 只要checkout tag就可以重现分支了
  * git branch rb1.0.1 tag-1.0 -- 这里就重现了之前的分支
 
-### git patch
+### git diff and patch
 
-* git apply patch
-
+* git diff : 工作断面与index的diff
+* git diff HEAD： 工作断面与repo的diff
+* git diff --cached： index与repo的diff
+* git diff br1： 当前分支与br1的HEAD的diff
+* git diff master br1： master HEAD 和br1的diff
+* git diff master origin/master： 本地master与上游repo的master的diff
+* git diff HEAD -- ./lib： 只是比较某个文件目录下面的diff
+* git diff master..br1: 同 diff master br1
+* git diff master...br1：‘master’,‘br1’的共有父分支和'br1'分支之间的差异
+* git diff master br1 >  patch: 将diff文件输出变为补丁文件
+* git apply patch： 应用补丁文件， 很可能产生错误
+* git apply PATCH --reject: 强制执行， 手动解决冲突
+* git am --resolved ： 告诉git已经解决了冲突， 不同重复提交留言信息
 
 
 ### 更多的命令
@@ -120,15 +131,15 @@
    git checkout -- .
 
 2. git reset命令可以将不要的commit干掉。 
-    当然只限于本地，如果push了之后好像就不行了。
+   当然只限于本地，如果push了之后好像就不行了。
    git reset <COMMIT>
    加上--hard参数的时候可以把工作目录也同时更新。
 
-3. git log的好用的参数
-   git log --stat  ：可以显示commit的一些统计信息
-   git log -p ：可以更详细的信息
-   git log master..c1 : 显示从master到c1分支之间的commit的log  
-   git log master...c1 : 显示两个分支之间的不共享的commit的log  
+3. git log的好用的参数  
+   git log --stat  ：可以显示commit的一些统计信息  
+   git log -p ：可以更详细的信息  
+   git log master..c1 : 显示从master到c1分支之间的commit的log    
+   git log master...c1 : 显示两个分支之间的不共享的commit的log    
      其中两个点和三个点的区别：  
       比如说分支是下面这样的状态的时候，  
       master..c1显示的是F, G  
