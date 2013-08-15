@@ -112,6 +112,32 @@
 ### git patch
 
 * git apply patch
+
+
+
+### 更多的命令
+1. 将现在的库强制与repo的状态同步
+   git checkout -- .
+
+2. git reset命令可以将不要的commit干掉。 
+    当然只限于本地，如果push了之后好像就不行了。
+   git reset <COMMIT>
+   加上--hard参数的时候可以把工作目录也同时更新。
+
+3. git log的好用的参数
+   git log --stat  ：可以显示commit的一些统计信息
+   git log -p ：可以更详细的信息
+   git log master..c1 : 显示从master到c1分支之间的commit的log  
+   git log master...c1 : 显示两个分支之间的不共享的commit的log  
+     其中两个点和三个点的区别：  
+      比如说分支是下面这样的状态的时候，  
+      master..c1显示的是F, G  
+      master...c1显示的是C, D, E, F, G  
+        A ---- B ---- C ---- D ---- E (master)  
+                   \-----F ----  G (c1)  
+
+
+
   
 
 
