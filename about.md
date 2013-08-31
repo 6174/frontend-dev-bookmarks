@@ -1,9 +1,26 @@
-# About this list
+## 横天8.26-8.30 周报
 
-If I have a specific development task the workflow for me looks like this:
+### 概览  
+* 上线日常/项目: 1 
+* 进行中的日常/项目: 2
 
-1. Search through Google, Github, Unheap, npm, bower, jster and so on.
-2. Compile a list of useful packages and tutorials for every one of them.
-3. Select the best package for the task.
+### 本周  
+* 周一下午去1688响应式评选活动  
+* 网厅回归上线发布  
+* 周期购订单列表页面的取消周期弹出层  
+   * 完成了弹出层的demo版本  
+   * 因为页面要求更改为iframe版本，我负责iframe页面的相关操作  
+* 周期购物订单详情页面  
+   * 继续与@花潭一起连调  
+   * 完成相关接口的测试  
+*  猜代码ppt演示  
+   * 从impress.js换成reveal.js  
 
-So I created this list to not have to go through step #1 and #2 every time.
+## 下周工作计划  
+* 周期购  
+* KHC（暂未确定）  
+
+## 心得  
+*  这周在做wt回归发布的时候，发布匆忙，在未进行代码的review之前就进行发布， 
+   差一点造成ie6下面的线上bug， 幸好及时发现问题。 总结， 在每次进行代码提交  
+   之前都要进行jslint 检测以及review代码， 避免低级错误发生。   
